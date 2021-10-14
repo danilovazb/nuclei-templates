@@ -1,0 +1,33 @@
+id: jexboss-backdoor
+
+info:
+  name: Jexboss Backdoor Exposed
+  author: @UnkL4b
+  severity: critical
+  tags: backdoor,cve,jboss,rce
+  reference:
+    - https://us-cert.cisa.gov/ncas/analysis-reports/AR18-312A
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/jexws/jexws.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jexws1/jexws1.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jexws2/jexws2.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jexws3/jexws3.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jexws4/jexws4.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jexinv4/jexinv4.jsp?ppp=echo%20pwn3d"
+      - "{{BaseURL}}/jbossass/jbossass.jsp?ppp=echo%20pwn3d"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "pwn3d"
+        part: body
+      - type: word
+        words:
+          - "X-Powered-By: Servlet"
+        part: header
